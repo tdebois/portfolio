@@ -1,0 +1,47 @@
+
+                        $.material.init();
+
+Survey.defaultBootstrapMaterialCss.navigationButton = "btn btn-green";
+Survey.defaultBootstrapMaterialCss.rating.item = "btn btn-default my-rating";
+Survey.StylesManager.applyTheme("bootstrapmaterial");
+
+
+
+var json = { pages: [
+        {questions: [
+            { type: "rating", name: "satisfaction", title: "How good is this website?", 
+                mininumRateDescription: "Bad", maximumRateDescription: "Really good" },
+            { type: "rating", name: "recommend friends", visibleIf: "{satisfaction} > 3", 
+                title: "Would you like to recommend this website to a friend?", 
+                mininumRateDescription: "Will not recommend", maximumRateDescription: "I will recommend" },
+            { type: "comment", name: "suggestions", title:"Who are you gonna recommend this website to?", }
+        ]}
+        
+    ]
+};
+
+window.survey = new Survey.Model(json);
+
+
+    survey.onComplete.add(function(result) {
+        document.querySelector('#surveyResult').textContent =
+            "Your mail program will send a mail to your remmended friend, thanks for your support!";
+
+			var link = "mailto:" + JSON.stringify(result.data.suggestions) 
+				+ "?cc="
+             + "&subject=" + escape("Heyyy have you seen Thomas Debois his new site!")
+             + "&body=" + escape(document.querySelector('#surveyResult').textContent =
+            "Check out this website: www.thomasdebois.be! By the way, don't forget to like, comment and subscribe! XD");
+
+
+	window.location.href = link;
+    });
+
+
+
+$("#surveyElement").Survey({ 
+    model: survey 
+});
+
+
+                    
